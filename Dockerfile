@@ -81,5 +81,5 @@ RUN mkdir -p storage/logs bootstrap/cache \
 # Buka port 80 untuk lalu lintas web di Railway
 EXPOSE 80
 
-# Jalankan PHP Built-in Web Server langsung mengarah ke folder public Laravel
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
+# JALANKAN INI AGAR ASET CSS/JS VITE BISA TERBACA SEMPURNA:
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public", "public/index.php"]
