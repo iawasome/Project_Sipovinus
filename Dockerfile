@@ -112,6 +112,8 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 EXPOSE 80
 
 # Production-friendly Apache settings
+# Ensure only one MPM is loaded (Railway sometimes triggers conflicts)
+RUN a2dismod mpm_event || true && a2enmod mpm_prefork || true
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf || true
