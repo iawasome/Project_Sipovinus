@@ -18,7 +18,11 @@ RUN a2enmod rewrite headers
 
 # Install required PHP extensions (adjust if your project needs more)
 # Common for Laravel apps
-RUN docker-php-ext-install pdo_mysql mbstring bcmath opcache
+# mbstring needs libonig-dev (Oniguruma)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libonig-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql mbstring bcmath opcache
 
 # Install Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -90,7 +94,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN a2enmod rewrite headers
 
 # Install PHP extensions used by Laravel (keep in sync with builder)
-RUN docker-php-ext-install pdo_mysql mbstring bcmath opcache
+# mbstring needs libonig-dev (Oniguruma)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libonig-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql mbstring bcmath opcache
 
 WORKDIR /var/www/html
 
