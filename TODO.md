@@ -1,56 +1,15 @@
-# TODO - Detail Proker CRUD Task terintegrasi Anggaran
+# TODO - Manajemen Divisi Active CRUD
 
-## Step 1: Tambah Migration (Schema)
-- Buat migration untuk menambah `task_id` (nullable FK, onDelete cascade) pada tabel `anggarans`.
-- Buat migration untuk menambah kolom pada tabel `tasks`: `nama_task`, `status` (enum), `anggaran_digunakan`.
-- (Opsional) jika kolom lama masih ada: `task_name`, `is_completed`—tidak dihapus dulu agar kompatibel.
+- [x] (Step 1) Buat controller: `app/Http/Controllers/DivisionController.php` dengan CRUD divisi.
 
-## Step 2: Update Model Relasi
-- `Task`:
-  - tambahkan fillable/casts/status enum bila perlu
-  - relasi: belongsTo ProgramKerja
-  - relasi: hasMany Anggaran (opsional)
-- `Anggaran`:
-  - relasi: belongsTo Task (task_id)
-  - update relasi agar sesuai column naming yang dipakai
-- `ProgramKerja`:
-  - pastikan relasi tasks tetap benar
+- [x] (Step 2) Tambah/ubah route di `routes/web.php` agar `/manajemen-divisi` menampilkan index CRUD.
 
-## Step 3: Update Controller Back-End
-- `ProgramKerjaController@show($id)`:
-  - eager load tasks + anggarans
-  - hitung `dana_dialokasikan` = budget_estimate
-  - hitung `dana_terpakai` = SUM anggarans.amount where type=expense
-  - hitung `sisa_dana` = dana_dialokasikan - dana_terpakai
-  - kirim ke view
-- `storeTask(Request $request, $prokerId)`:
-  - validasi (nama_task, status, anggaran_digunakan)
-  - simpan Task
-  - simpan Anggaran type=expense, amount=anggaran_digunakan, program_id=prokerId, task_id=taskId
-  - pakai DB::transaction
-- `updateTask(Request $request, $taskId)`:
-  - update Task
-  - update Anggaran yang terhubung lewat task_id
-  - pakai DB::transaction
-- `destroyTask($taskId)`:
-  - delete Task (cascade hapus anggaran)
+- [x] (Step 3) Buat views CRUD: `resources/views/pages/divisi/index.blade.php`, `create.blade.php`, `edit.blade.php`.
 
-## Step 4: Tambah Routes
-- Tambahkan route POST/PUT/DELETE sesuai requirement di `routes/web.php`.
+- [x] (Step 4) Update `resources/views/pages/manajemen-divisi.blade.php` supaya menampilkan halaman index CRUD.
 
-## Step 5: Front-End View
-- Buat `resources/views/pages/program-kerja/show.blade.php`:
-  - card ringkasan proker (Nama, Divisi, Dana Awal, Dana Terpakai, Sisa)
-  - tabel list Task dengan tombol edit & hapus
-  - modal Tailwind untuk tambah task
-  - modal untuk edit task
-  - gunakan endpoint route sesuai Step 4
+- [x] (Step 5) Pastikan tombol tambah/edit/hapus hanya tampil untuk admin (role_id == 1) dan route CRUD diproteksi.
 
-## Step 6: Integrasi + Testing Manual
-- Jalankan migrate
-- Cek:
-  - tambah task → baris anggaran expense dibuat
-  - edit task → nominal expense ikut berubah
-  - hapus task → baris anggaran expense ikut terhapus
+- [x] (Step 6) Validasi manual: buka `/manajemen-divisi`, cek daftar, cek akses admin vs non-admin.
 
 

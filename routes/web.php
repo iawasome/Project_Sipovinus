@@ -38,9 +38,18 @@ Route::get('/calendar', function () {
 })->name('calendar');
 
 // profile pages
-Route::get('/profile', function () {
-    return view('pages.profile', ['title' => 'Profile']);
-})->name('profile');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', function () {
+        return view('pages.profile', ['title' => 'Profile']);
+    })->name('profile');
+
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])
+        ->name('profile.update');
+
+
+
+});
+
 
 // form pages
 Route::get('/form-elements', function () {
@@ -78,10 +87,16 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// statis menu - Manajemen Divisi
-Route::get('/manajemen-divisi', function () {
-    return view('pages.manajemen-divisi', ['title' => 'Manajemen Divisi']);
-})->name('manajemen-divisi');
+// Manajemen Divisi (CRUD hanya admin)
+use App\Http\Controllers\DivisionController;
+
+Route::get('/manajemen-divisi', [DivisionController::class, 'index'])->name('manajemen-divisi.index');
+Route::get('/manajemen-divisi/create', [DivisionController::class, 'create'])->name('manajemen-divisi.create');
+Route::post('/manajemen-divisi', [DivisionController::class, 'store'])->name('manajemen-divisi.store');
+Route::get('/manajemen-divisi/{id}/edit', [DivisionController::class, 'edit'])->name('manajemen-divisi.edit');
+Route::put('/manajemen-divisi/{id}', [DivisionController::class, 'update'])->name('manajemen-divisi.update');
+Route::delete('/manajemen-divisi/{id}', [DivisionController::class, 'destroy'])->name('manajemen-divisi.destroy');
+
 
 
 

@@ -207,8 +207,38 @@ class ProgramKerjaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // belum diimplementasi
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'division_id' => ['sometimes', 'nullable', 'integer'],
+            'status' => ['required', 'in:pending,on_progress,completed'],
+            'start_date' => ['sometimes', 'nullable', 'date'],
+            'end_date' => ['sometimes', 'nullable', 'date', 'after_or_equal:start_date'],
+            'budget_estimate' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+        ]);
+
+        $proker = ProgramKerja::findOrFail($id);
+
+        // Update hanya field yang tersedia dari input form.
+        $updateData = [
+            'name' => $validated['name'],
+            'status' => $validated['status'],
+        ];
+
+        foreach (['division_id', 'start_date', 'end_date', 'budget_estimate'] as $field) {
+            if (array_key_exists($field, $validated)) {
+                $updateData[$field] = $validated[$field];
+            }
+        }
+
+        $proker->update($updateData);
+
+
+        return redirect()
+            ->route('program-kerja.show', $proker->id)
+            ->with('success', 'Program Kerja berhasil diupdate');
+
     }
+
 
     /**
      * Remove the specified resource from storage.

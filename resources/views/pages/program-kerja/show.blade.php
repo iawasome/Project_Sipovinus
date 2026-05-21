@@ -65,13 +65,13 @@
                 <h2 class="text-lg font-semibold text-black dark:text-white">Daftar Task</h2>
 
                 <div class="sm:flex sm:items-center sm:justify-end">
-                    <button
+<button
                         type="button"
                         id="btnAddTask"
-                        class="inline-flex items-center justify-center rounded bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-95 transition"
+                        class="inline-flex items-center justify-center bg-primary text-white hover:bg-opacity-90 font-medium rounded py-2 px-4 shadow-md transition"
                         onclick="document.getElementById('addTaskModal').classList.remove('hidden')"
                     >
-                        + Tambah Task
+                        <span class="text-black dark:text-white">+ Tambah Task</span>
                     </button>
                 </div>
             </div>
@@ -83,8 +83,10 @@
                             <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Nama Task</th>
                             <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Status</th>
                             <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Anggaran</th>
+                            <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Due Date</th>
                             <th class="bg-gray-2 dark:bg-meta-4 text-right font-medium text-black dark:text-white px-4 py-3">Aksi</th>
                         </tr>
+
                     </thead>
                     <tbody>
                         @forelse($tasks as $task)
@@ -115,7 +117,12 @@
                                     Rp {{ number_format($anggaran, 2, ',', '.') }}
                                 </td>
 
+                                <td class="px-4 py-3 text-black dark:text-white">
+                                    {{ optional($task->due_date)->format('Y-m-d') }}
+                                </td>
+
                                 <td class="px-4 py-3 text-right">
+
                                     <button
                                         type="button"
                                         class="inline-flex items-center justify-center rounded border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 hover:bg-blue-100 transition dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-200"
@@ -125,6 +132,7 @@
                                         data-nama="{{ $task->nama_task }}"
                                         data-status="{{ $task->status }}"
                                         data-anggaran="{{ $task->anggaran_digunakan }}"
+                                        data-due-date="{{ optional($task->due_date)->format('Y-m-d') }}"
                                     >
                                         {{-- Icon mini (pencil) --}}
                                         <svg class="mr-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -174,56 +182,86 @@
 {{-- Modal Add Task --}}
 <div id="addTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
     <div class="relative p-4 w-full max-w-lg max-h-full mx-auto">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative bg-white dark:bg-boxdark border border-stroke dark:border-strokedark rounded-lg shadow">
             <div class="p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
-                <h3 class="text-lg font-semibold">Tambah Task</h3>
+                <h3 class="text-lg font-semibold text-black dark:text-white">Tambah Task</h3>
             </div>
 
             <form method="POST" action="{{ route('task.store', $proker->id) }}" class="p-4 md:p-5">
                 @csrf
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium">Nama Task</label>
-                        <input name="nama_task" type="text" required class="input input-bordered w-full" value="{{ old('nama_task') }}" />
-                        @error('nama_task')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
-                    </div>
 
-                    <div>
-                        <label class="block text-sm font-medium">Status</label>
-                        <select name="status" class="select select-bordered w-full" required>
-                            <option value="pending" @selected(old('status')==='pending')>pending</option>
-                            <option value="on_progress" @selected(old('status')==='on_progress')>on_progress</option>
-                            <option value="completed" @selected(old('status')==='completed')>completed</option>
-                        </select>
-                        @error('status')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Due Date</label>
-                        <x-form.date-picker
-                            name="due_date"
-                            :default-date="old('due_date')"
-                            placeholder="Pilih tanggal"
-                        />
-                        @error('due_date')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Anggaran Digunakan</label>
-
-                        <input name="anggaran_digunakan" type="number" step="0.01" min="0" max="999999999999.99" required class="input input-bordered w-full" value="{{ old('anggaran_digunakan') }}" />
-                        @error('anggaran_digunakan')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
-                    </div>
+                <div class="mb-4.5">
+                    <label class="mb-2.5 block text-black dark:text-white font-medium">Nama Task</label>
+                    <input
+                        name="nama_task"
+                        type="text"
+                        required
+                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                        value="{{ old('nama_task') }}"
+                    />
+                    @error('nama_task')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                <div class="mt-6 flex justify-end gap-2">
-                    <button type="button" class="btn btn-outline-secondary" data-modal-hide="addTaskModal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                <div class="mb-4.5">
+                    <label class="mb-2.5 block text-black dark:text-white font-medium">Status</label>
+                    <select
+                        name="status"
+                        required
+                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                    >
+                        <option value="pending" @selected(old('status')==='pending')>pending</option>
+                        <option value="on_progress" @selected(old('status')==='on_progress')>on_progress</option>
+                        <option value="completed" @selected(old('status')==='completed')>completed</option>
+                    </select>
+                    @error('status')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="mb-4.5">
+                    <label class="mb-2.5 block text-black dark:text-white font-medium">Due Date</label>
+                    <x-form.date-picker
+                        name="due_date"
+                        :default-date="old('due_date')"
+                        placeholder="Pilih tanggal"
+                    />
+                    @error('due_date')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="mb-4.5">
+                    <label class="mb-2.5 block text-black dark:text-white font-medium">Anggaran</label>
+                    <input
+                        name="anggaran_digunakan"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="999999999999.99"
+                        required
+                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                        value="{{ old('anggaran_digunakan') }}"
+                    />
+                    @error('anggaran_digunakan')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="flex justify-end gap-4.5 border-t border-stroke dark:border-strokedark pt-4.5">
+                    <button
+                        type="button"
+                        class="flex justify-center rounded border border-stroke dark:border-strokedark py-2 px-6 font-medium text-black dark:text-white hover:shadow-1"
+                        data-modal-hide="addTaskModal"
+                        onclick="document.getElementById('addTaskModal').classList.add('hidden')"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        type="submit"
+                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90-shadow-1"
+                    >
+                        Simpan
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 
 {{-- Modal Edit Task --}}
 <div id="editTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
@@ -237,7 +275,7 @@
                 @csrf
                 @method('PUT')
                 <div class="space-y-4">
-                    <input type="hidden" id="edit_task_id" name="_task_id" />
+                    <input type="hidden" id="edit_task_id" />
 
                     <div>
                         <label class="block text-sm font-medium">Nama Task</label>
@@ -254,13 +292,24 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium">Due Date</label>
+                        <x-form.date-picker
+                            name="due_date"
+                            :default-date="''"
+                            placeholder="Pilih tanggal"
+                        />
+                    </div>
+
+
+                    <div>
                         <label class="block text-sm font-medium">Anggaran Digunakan</label>
                         <input id="edit_anggaran" name="anggaran_digunakan" type="number" step="0.01" min="0" required class="input input-bordered w-full" />
                     </div>
                 </div>
 
+
                 <div class="mt-6 flex justify-end gap-2">
-                    <button type="button" class="btn btn-outline-secondary" data-modal-hide="editTaskModal">Batal</button>
+<button type="button" class="btn btn-outline-secondary" data-modal-hide="editTaskModal" onclick="const m=document.getElementById('editTaskModal'); m?.classList.add('hidden'); m?.classList.remove('block');">Batal</button>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
@@ -277,8 +326,15 @@
         const nama = document.getElementById('edit_nama_task');
         const status = document.getElementById('edit_status');
         const anggaran = document.getElementById('edit_anggaran');
+        // Due date component hasilnya bukan input id edit_due_date, jadi kita ambil by name
+        const dueDate = document.querySelector('#editTaskModal [name="due_date"]');
+        const modal = document.getElementById('editTaskModal');
+
+
 
         document.addEventListener('click', function(e){
+
+
             const btn = e.target.closest('[data-task-id]');
             if(!btn) return;
 
@@ -286,14 +342,23 @@
             const namaVal = btn.getAttribute('data-nama');
             const statusVal = btn.getAttribute('data-status');
             const anggaranVal = btn.getAttribute('data-anggaran');
+            const dueDateVal = btn.getAttribute('data-due-date');
 
             taskId.value = id;
             nama.value = namaVal;
             status.value = statusVal;
             anggaran.value = anggaranVal;
+            if(dueDate && dueDate.tagName === 'INPUT'){
+                dueDate.value = dueDateVal || '';
+            }
+
 
             // Set action URL
             form.action = '{{ url('/task') }}/' + id;
+
+            // Pastikan modal terbuka
+            modal?.classList.remove('hidden');
+            modal?.classList.add('block');
         });
     })();
 </script>

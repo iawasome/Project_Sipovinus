@@ -74,10 +74,16 @@
             @foreach($tasks as $i => $task)
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td>{{ $task->task_name }}</td>
-                    <td>{{ $task->due_date }}</td>
                     <td>
-                        {{ $task->is_completed ? 'Selesai' : 'Belum Selesai' }}
+                        {{ $task->nama_task ?? $task->task_name ?? '-' }}
+                    </td>
+                    <td>{{ optional($task->due_date)->format('Y-m-d') ?? '-' }}</td>
+                    <td>
+                        @php
+                            $taskStatus = $task->status ?? null;
+                            $isDone = $taskStatus === 'completed' || ($taskStatus === null && ($task->is_completed ?? false) === true);
+                        @endphp
+                        {{ $isDone ? 'Selesai' : 'Belum Selesai' }}
                     </td>
                 </tr>
             @endforeach
