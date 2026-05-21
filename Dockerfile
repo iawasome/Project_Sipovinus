@@ -57,29 +57,39 @@ RUN mkdir -p storage/app storage/framework storage/logs bootstrap/cache public/b
 
 
 ## ============================================================
-## Runtime stage: copy built artifacts only
+## Runtime stage: PHP + Caddy (Super Stabil, Ringan & Aset Terbuka)
 ## ============================================================
-FROM php:8.3-cli-alpine AS runtime
+FROM php:8.3-fpm-alpine AS runtime
 
-# Install extension PHP dependencies di Alpine Linux (Termasuk Oniguruma)
-RUN apk add --no-cache \
-    oniguruma-dev \
+# Install Caddy Server dan dependensi PHP di Alpine Linux
+RUN apk add --no-cache caddy oniguruma-dev \
     && docker-php-ext-install pdo_mysql mbstring bcmath opcache
 
 WORKDIR /var/www/html
 
-# Copy seluruh aplikasi dan asset yang sudah di-build dari stage builder
+# Copy seluruh aplikasi dari stage builder
 COPY --from=builder /var/www/html /var/www/html
 
-# HAPUS file cache bawaan secara paksa agar Laravel membuat yang baru di server
+# Hapus file cache bawaan secara paksa agar Laravel membuat yang baru di server
 RUN rm -f bootstrap/cache/*.php
 
-# Buat folder log secara manual dan beri izin akses penuh secara brutal
+# Beri izin akses folder storage & cache secara penuh
 RUN mkdir -p storage/logs bootstrap/cache \
     && chmod -R 777 storage bootstrap/cache public
 
-# Buka port 80 untuk lalu lintas web di Railway
+# Buat file konfigurasi Caddy secara otomatis di dalam container
+RUN echo ' \
+:80 { \
+    root * /var/www/html/public \
+    file_server \
+    php_fastcgi 127.0.0.1:9000 \
+    log { \
+        output stdout \
+    } \
+}' > /etc/caddy/Caddyfile
+
+# Buka port 80 untuk Railway
 EXPOSE 80
 
-# JALANKAN INI AGAR ASET CSS/JS VITE BISA TERBACA SEMPURNA:
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public", "public/index.php"]
+# Jalankan PHP-FPM dan Caddy Server secara bersamaan
+CMD ["sh", "-c", "php-fpm -D && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
