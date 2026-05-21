@@ -71,8 +71,11 @@ WORKDIR /var/www/html
 # Copy seluruh aplikasi dan asset yang sudah di-build dari stage builder
 COPY --from=builder /var/www/html /var/www/html
 
-# Beri izin akses penuh folder storage & cache agar Laravel bisa menulis log/session
-RUN chmod -R 777 storage bootstrap/cache
+# Beri izin akses penuh folder storage, cache, dan logs secara brutal
+RUN chmod -R 777 storage bootstrap/cache public
+
+# Paksa bersihkan semua cache yang tersisa dari tahap build
+RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
 
 # Buka port 80 untuk lalu lintas web di Railway
 EXPOSE 80
