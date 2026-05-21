@@ -77,16 +77,8 @@ RUN rm -f bootstrap/cache/*.php
 RUN mkdir -p storage/logs bootstrap/cache \
     && chmod -R 777 storage bootstrap/cache public
 
-# Buat file konfigurasi Caddy secara otomatis di dalam container
-RUN echo ' \
-:80 { \
-    root * /var/www/html/public \
-    file_server \
-    php_fastcgi 127.0.0.1:9000 \
-    log { \
-        output stdout \
-    } \
-}' > /etc/caddy/Caddyfile
+# Buat file konfigurasi Caddy dengan format EOF (Jauh Lebih Aman & Rapi)
+RUN printf '{\n\tadmin off\n}\n\n:80 {\n\troot * /var/www/html/public\n\tfile_server\n\tphp_fastcgi 127.0.0.1:9000\n\tlog {\n\t\toutput stdout\n\t}\n}\n' > /etc/caddy/Caddyfile
 
 # Buka port 80 untuk Railway
 EXPOSE 80
