@@ -39,9 +39,9 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Account created successfully.');
+        // Paksa langsung masuk ke halaman utama dashboard setelah registrasi
+        return redirect('/dashboard')->with('success', 'Account created successfully.');
     }
-
 
     public function login(Request $request)
     {
@@ -58,7 +58,8 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/')->with('success', 'Welcome back!');
+        // Paksa langsung masuk ke halaman dashboard agar tidak memantul ke route '/'
+        return redirect('/dashboard')->with('success', 'Welcome back!');
     }
 
     public function logout(Request $request)
@@ -71,4 +72,3 @@ class AuthController extends Controller
         return redirect('/signin');
     }
 }
-
