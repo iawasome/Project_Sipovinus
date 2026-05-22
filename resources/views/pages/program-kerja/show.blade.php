@@ -252,7 +252,7 @@
                     </button>
                     <button
                         type="submit"
-                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90 shadow-md"
+                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-black hover:bg-opacity-90 shadow-md"
                     >
                         Simpan
                     </button>
