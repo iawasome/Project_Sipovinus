@@ -59,10 +59,11 @@
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Daftar Task</h2>
 
                 <div class="sm:flex sm:items-center sm:justify-end">
+                    {{-- FIX POSISI: Tombol Tambah Task yang Benar, Biru Solid & Anti-Faded nangkring di sini! --}}
                     <button
                         type="button"
                         id="btnAddTask"
-                        class="inline-flex items-center justify-center bg-primary text-white hover:bg-opacity-90 font-medium rounded py-2 px-4 shadow-md transition"
+                        class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-medium rounded py-2 px-4 shadow-md transition"
                         onclick="document.getElementById('addTaskModal').classList.remove('hidden')"
                     >
                         <span>+ Tambah Task</span>
@@ -177,15 +178,8 @@
 <div id="addTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
     <div class="relative p-4 w-full max-w-lg max-h-full mx-auto">
         <div class="relative bg-white dark:bg-slate-900 border border-stroke dark:border-slate-800 rounded-lg shadow">
-            <div class="sm:flex sm:items-center sm:justify-end">
-                <button
-                    type="button"
-                    id="btnAddTask"
-                    class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-medium rounded py-2 px-4 shadow-md transition"
-                    onclick="document.getElementById('addTaskModal').classList.remove('hidden')"
-                >
-                    <span>+ Tambah Task</span>
-                </button>
+            <div class="p-4 md:p-5 border-b rounded-t border-slate-200 dark:border-slate-800">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tambah Task</h3>
             </div>
 
             <form method="POST" action="{{ route('task.store', $proker->id) }}" class="p-4 md:p-5">
