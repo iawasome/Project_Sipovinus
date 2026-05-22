@@ -65,7 +65,7 @@
                 <h2 class="text-lg font-semibold text-black dark:text-white">Daftar Task</h2>
 
                 <div class="sm:flex sm:items-center sm:justify-end">
-<button
+                    <button
                         type="button"
                         id="btnAddTask"
                         class="inline-flex items-center justify-center bg-primary text-white hover:bg-opacity-90 font-medium rounded py-2 px-4 shadow-md transition"
@@ -86,20 +86,24 @@
                             <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Due Date</th>
                             <th class="bg-gray-2 dark:bg-meta-4 text-right font-medium text-black dark:text-white px-4 py-3">Aksi</th>
                         </tr>
-
                     </thead>
                     <tbody>
                         @forelse($tasks as $task)
                             @php
                                 $status = $task->status;
                                 $badgeBase = 'inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium';
-                                // Status colors that remain readable in both light/dark.
                                 $badgeClass = match($status) {
                                     'completed' => 'bg-green-500 text-green-700 dark:bg-green-400/20 dark:text-green-300',
                                     'on_progress' => 'bg-yellow-400 text-yellow-800 dark:bg-yellow-400/20 dark:text-yellow-200',
                                     default => 'bg-gray-400 text-gray-700 dark:bg-gray-300/15 dark:text-gray-200',
                                 };
                                 $anggaran = $task->anggaran_digunakan ?? 0;
+
+                                // Solusi Pengaman Tanggal: Jika lolos berupa string biasa, kita parsing atau cetak langsung
+                                $formattedDate = '-';
+                                if ($task->due_date) {
+                                    $formattedDate = is_string($task->due_date) ? date('Y-m-d', strtotime($task->due_date)) : $task->due_date->format('Y-m-d');
+                                }
                             @endphp
 
                             <tr class="border-t border-stroke dark:border-strokedark">
@@ -118,11 +122,10 @@
                                 </td>
 
                                 <td class="px-4 py-3 text-black dark:text-white">
-                                    {{ optional($task->due_date)->format('Y-m-d') }}
+                                    {{ $formattedDate }}
                                 </td>
 
                                 <td class="px-4 py-3 text-right">
-
                                     <button
                                         type="button"
                                         class="inline-flex items-center justify-center rounded border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 hover:bg-blue-100 transition dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-200"
@@ -132,9 +135,8 @@
                                         data-nama="{{ $task->nama_task }}"
                                         data-status="{{ $task->status }}"
                                         data-anggaran="{{ $task->anggaran_digunakan }}"
-                                        data-due-date="{{ optional($task->due_date)->format('Y-m-d') }}"
+                                        data-due-date="{{ $formattedDate }}"
                                     >
-                                        {{-- Icon mini (pencil) --}}
                                         <svg class="mr-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M12 20h9"/>
                                             <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
@@ -154,7 +156,6 @@
                                             class="inline-flex items-center justify-center rounded border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-danger hover:bg-red-100 transition dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-200"
                                             type="submit"
                                         >
-                                            {{-- Icon mini (trash) --}}
                                             <svg class="mr-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="3 6 5 6 21 6"/>
                                                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
@@ -169,7 +170,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-4 py-8 text-center text-gray-600 dark:text-gray-300">Belum ada task.</td>
+                                <td colspan="5" class="px-4 py-8 text-center text-gray-600 dark:text-gray-300">Belum ada task.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -245,14 +246,13 @@
                     <button
                         type="button"
                         class="flex justify-center rounded border border-stroke dark:border-strokedark py-2 px-6 font-medium text-black dark:text-white hover:shadow-1"
-                        data-modal-hide="addTaskModal"
                         onclick="document.getElementById('addTaskModal').classList.add('hidden')"
                     >
                         Batal
                     </button>
                     <button
                         type="submit"
-                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90-shadow-1"
+                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90 shadow-md"
                     >
                         Simpan
                     </button>
@@ -262,13 +262,12 @@
     </div>
 </div>
 
-
 {{-- Modal Edit Task --}}
 <div id="editTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
     <div class="relative p-4 w-full max-w-lg max-h-full mx-auto">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 border border-stroke dark:border-strokedark">
             <div class="p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
-                <h3 class="text-lg font-semibold">Edit Task</h3>
+                <h3 class="text-lg font-semibold text-black dark:text-white">Edit Task</h3>
             </div>
 
             <form id="editTaskForm" method="POST" class="p-4 md:p-5">
@@ -278,13 +277,13 @@
                     <input type="hidden" id="edit_task_id" />
 
                     <div>
-                        <label class="block text-sm font-medium">Nama Task</label>
-                        <input id="edit_nama_task" name="nama_task" type="text" required class="input input-bordered w-full" />
+                        <label class="block text-sm font-medium text-black dark:text-white">Nama Task</label>
+                        <input id="edit_nama_task" name="nama_task" type="text" required class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" />
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium">Status</label>
-                        <select id="edit_status" name="status" class="select select-bordered w-full" required>
+                        <label class="block text-sm font-medium text-black dark:text-white">Status</label>
+                        <select id="edit_status" name="status" class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" required>
                             <option value="pending">pending</option>
                             <option value="on_progress">on_progress</option>
                             <option value="completed">completed</option>
@@ -292,7 +291,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium">Due Date</label>
+                        <label class="block text-sm font-medium text-black dark:text-white">Due Date</label>
                         <x-form.date-picker
                             name="due_date"
                             :default-date="''"
@@ -300,17 +299,15 @@
                         />
                     </div>
 
-
                     <div>
-                        <label class="block text-sm font-medium">Anggaran Digunakan</label>
-                        <input id="edit_anggaran" name="anggaran_digunakan" type="number" step="0.01" min="0" required class="input input-bordered w-full" />
+                        <label class="block text-sm font-medium text-black dark:text-white">Anggaran Digunakan</label>
+                        <input id="edit_anggaran" name="anggaran_digunakan" type="number" step="0.01" min="0" required class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" />
                     </div>
                 </div>
 
-
-                <div class="mt-6 flex justify-end gap-2">
-<button type="button" class="btn btn-outline-secondary" data-modal-hide="editTaskModal" onclick="const m=document.getElementById('editTaskModal'); m?.classList.add('hidden'); m?.classList.remove('block');">Batal</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                <div class="mt-6 flex justify-end gap-2 border-t border-stroke dark:border-strokedark pt-4">
+                    <button type="button" class="flex justify-center rounded border border-stroke py-2 px-4 font-medium text-black dark:text-white" onclick="document.getElementById('editTaskModal').classList.add('hidden');">Batal</button>
+                    <button type="submit" class="flex justify-center rounded bg-primary py-2 px-4 font-medium text-white hover:bg-opacity-90">Update</button>
                 </div>
             </form>
         </div>
@@ -318,23 +315,15 @@
 </div>
 
 <script>
-    // TailAdmin/flowbite-style modal toggle umumnya butuh data attributes.
-    // Kita pastikan URL form update dibentuk saat klik Edit.
     (function(){
         const form = document.getElementById('editTaskForm');
         const taskId = document.getElementById('edit_task_id');
         const nama = document.getElementById('edit_nama_task');
         const status = document.getElementById('edit_status');
         const anggaran = document.getElementById('edit_anggaran');
-        // Due date component hasilnya bukan input id edit_due_date, jadi kita ambil by name
-        const dueDate = document.querySelector('#editTaskModal [name="due_date"]');
         const modal = document.getElementById('editTaskModal');
 
-
-
         document.addEventListener('click', function(e){
-
-
             const btn = e.target.closest('[data-task-id]');
             if(!btn) return;
 
@@ -348,19 +337,22 @@
             nama.value = namaVal;
             status.value = statusVal;
             anggaran.value = anggaranVal;
-            if(dueDate && dueDate.tagName === 'INPUT'){
-                dueDate.value = dueDateVal || '';
+
+            // FIX UTAMA: Tangkap input flatpickr/date-picker di dalam container modal edit secara presisi
+            const dueDateInput = modal.querySelector('input[name="due_date"]');
+            if(dueDateInput) {
+                dueDateInput.value = dueDateVal || '';
+                // Jika komponen menggunakan Flatpickr, paksa instance-nya untuk mendeteksi tanggal barunya
+                if(dueDateInput._flatpickr) {
+                    dueDateInput._flatpickr.setDate(dueDateVal || '');
+                }
             }
 
-
-            // Set action URL
             form.action = '{{ url('/task') }}/' + id;
 
-            // Pastikan modal terbuka
             modal?.classList.remove('hidden');
             modal?.classList.add('block');
         });
     })();
 </script>
 @endsection
-

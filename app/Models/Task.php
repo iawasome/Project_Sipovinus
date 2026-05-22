@@ -23,6 +23,7 @@ class Task extends Model
     protected $casts = [
         'is_completed' => 'boolean',
         'anggaran_digunakan' => 'decimal:2',
+        'due_date' => 'date',
     ];
 
     public function program()
