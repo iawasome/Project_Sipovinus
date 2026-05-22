@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="rounded-2xl border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark text-black dark:text-white">
+<div class="rounded-2xl border border-stroke bg-white p-4 dark:border-strokedark dark:bg-slate-900 text-black dark:text-white">
     <div class="flex flex-col gap-4">
         {{-- Header + Export PDF --}}
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold text-black dark:text-white">Detail Proker</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-300">{{ $title ?? 'Program Kerja' }}</p>
+                <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Detail Proker</h1>
+                <p class="text-sm text-slate-600 dark:text-slate-400">{{ $title ?? 'Program Kerja' }}</p>
             </div>
 
             <div class="flex gap-2">
@@ -23,46 +23,40 @@
         {{-- Section Detail Proker --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             {{-- Card 1: Informasi Utama --}}
-            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div class="p-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Nama</p>
-                    <p class="mt-1 text-lg font-bold text-black dark:text-white">{{ $proker->name }}</p>
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Divisi: {{ $proker->division?->name }}</p>
-                </div>
+            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-slate-800 dark:bg-slate-800/50 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Nama</p>
+                <p class="mt-1 text-lg font-bold text-slate-900 dark:text-white">{{ $proker->name }}</p>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 font-medium">Divisi: {{ $proker->division?->name }}</p>
             </div>
 
             {{-- Card 2: Dana Awal --}}
-            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div class="p-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Dana Awal</p>
-                    <p class="mt-1 text-lg font-semibold text-black dark:text-white">
-                        Rp {{ number_format($dana_dialokasikan, 2, ',', '.') }}
-                    </p>
-                </div>
+            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-slate-800 dark:bg-slate-800/50 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Dana Awal</p>
+                <p class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+                    Rp {{ number_format($dana_dialokasikan, 2, ',', '.') }}
+                </p>
             </div>
 
             {{-- Card 3: Dana Terpakai & Sisa Dana --}}
-            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div class="p-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Dana Terpakai</p>
-                    <p class="mt-1 text-lg font-semibold text-black dark:text-white">
-                        Rp {{ number_format($dana_terpakai, 2, ',', '.') }}
-                    </p>
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                        Sisa Dana:
-                        <span class="ml-1 font-semibold text-green-700 dark:text-green-400">
-                            Rp {{ number_format($sisa_dana, 2, ',', '.') }}
-                        </span>
-                    </p>
-                </div>
+            <div class="rounded-xl border border-stroke bg-white shadow-default dark:border-slate-800 dark:bg-slate-800/50 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Dana Terpakai</p>
+                <p class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+                    Rp {{ number_format($dana_terpakai, 2, ',', '.') }}
+                </p>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                    Sisa Dana:
+                    <span class="ml-1 font-bold text-emerald-600 dark:text-emerald-400">
+                        Rp {{ number_format($sisa_dana, 2, ',', '.') }}
+                    </span>
+                </p>
             </div>
         </div>
 
         {{-- Section Daftar Task & Table --}}
-        <div class="rounded-2xl border border-stroke bg-white dark:border-strokedark dark:bg-boxdark p-4">
+        <div class="rounded-2xl border border-stroke bg-white dark:border-slate-800 dark:bg-slate-800/30 p-4">
             {{-- Table Header --}}
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-lg font-semibold text-black dark:text-white">Daftar Task</h2>
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Daftar Task</h2>
 
                 <div class="sm:flex sm:items-center sm:justify-end">
                     <button
@@ -71,7 +65,7 @@
                         class="inline-flex items-center justify-center bg-primary text-white hover:bg-opacity-90 font-medium rounded py-2 px-4 shadow-md transition"
                         onclick="document.getElementById('addTaskModal').classList.remove('hidden')"
                     >
-                        <span class="text-black dark:text-white">+ Tambah Task</span>
+                        <span>+ Tambah Task</span>
                     </button>
                 </div>
             </div>
@@ -79,12 +73,12 @@
             <div class="mt-4 overflow-x-auto">
                 <table class="w-full table-auto border-collapse">
                     <thead>
-                        <tr>
-                            <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Nama Task</th>
-                            <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Status</th>
-                            <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Anggaran</th>
-                            <th class="bg-gray-2 dark:bg-meta-4 text-left font-medium text-black dark:text-white px-4 py-3">Due Date</th>
-                            <th class="bg-gray-2 dark:bg-meta-4 text-right font-medium text-black dark:text-white px-4 py-3">Aksi</th>
+                        <tr class="border-b border-stroke dark:border-slate-700">
+                            <th class="bg-slate-50 dark:bg-slate-800 text-left font-semibold text-slate-900 dark:text-white px-4 py-3">Nama Task</th>
+                            <th class="bg-slate-50 dark:bg-slate-800 text-left font-semibold text-slate-900 dark:text-white px-4 py-3">Status</th>
+                            <th class="bg-slate-50 dark:bg-slate-800 text-left font-semibold text-slate-900 dark:text-white px-4 py-3">Anggaran</th>
+                            <th class="bg-slate-50 dark:bg-slate-800 text-left font-semibold text-slate-900 dark:text-white px-4 py-3">Due Date</th>
+                            <th class="bg-slate-50 dark:bg-slate-800 text-right font-semibold text-slate-900 dark:text-white px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,21 +87,20 @@
                                 $status = $task->status;
                                 $badgeBase = 'inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium';
                                 $badgeClass = match($status) {
-                                    'completed' => 'bg-green-500 text-green-700 dark:bg-green-400/20 dark:text-green-300',
-                                    'on_progress' => 'bg-yellow-400 text-yellow-800 dark:bg-yellow-400/20 dark:text-yellow-200',
-                                    default => 'bg-gray-400 text-gray-700 dark:bg-gray-300/15 dark:text-gray-200',
+                                    'completed' => 'bg-emerald-500 text-emerald-700 dark:bg-emerald-400/20 dark:text-emerald-300',
+                                    'on_progress' => 'bg-amber-400 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200',
+                                    default => 'bg-slate-400 text-slate-700 dark:bg-slate-300/15 dark:text-slate-200',
                                 };
                                 $anggaran = $task->anggaran_digunakan ?? 0;
 
-                                // Solusi Pengaman Tanggal: Jika lolos berupa string biasa, kita parsing atau cetak langsung
                                 $formattedDate = '-';
                                 if ($task->due_date) {
                                     $formattedDate = is_string($task->due_date) ? date('Y-m-d', strtotime($task->due_date)) : $task->due_date->format('Y-m-d');
                                 }
                             @endphp
 
-                            <tr class="border-t border-stroke dark:border-strokedark">
-                                <td class="px-4 py-3 text-black dark:text-white">
+                            <tr class="border-t border-stroke dark:border-slate-700 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                                <td class="px-4 py-3 text-slate-900 dark:text-white font-medium">
                                     {{ $task->nama_task }}
                                 </td>
 
@@ -117,11 +110,11 @@
                                     </span>
                                 </td>
 
-                                <td class="px-4 py-3 text-right text-black dark:text-white">
+                                <td class="px-4 py-3 text-right text-slate-900 dark:text-white font-mono">
                                     Rp {{ number_format($anggaran, 2, ',', '.') }}
                                 </td>
 
-                                <td class="px-4 py-3 text-black dark:text-white">
+                                <td class="px-4 py-3 text-slate-900 dark:text-white">
                                     {{ $formattedDate }}
                                 </td>
 
@@ -170,7 +163,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-8 text-center text-gray-600 dark:text-gray-300">Belum ada task.</td>
+                                <td colspan="5" class="px-4 py-8 text-center text-slate-500 dark:text-slate-400">Belum ada task.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -183,76 +176,71 @@
 {{-- Modal Add Task --}}
 <div id="addTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
     <div class="relative p-4 w-full max-w-lg max-h-full mx-auto">
-        <div class="relative bg-white dark:bg-boxdark border border-stroke dark:border-strokedark rounded-lg shadow">
-            <div class="p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-black dark:text-white">Tambah Task</h3>
+        <div class="relative bg-white dark:bg-slate-900 border border-stroke dark:border-slate-800 rounded-lg shadow">
+            <div class="p-4 md:p-5 border-b rounded-t border-slate-200 dark:border-slate-800">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Tambah Task</h3>
             </div>
 
             <form method="POST" action="{{ route('task.store', $proker->id) }}" class="p-4 md:p-5">
                 @csrf
 
                 <div class="mb-4.5">
-                    <label class="mb-2.5 block text-black dark:text-white font-medium">Nama Task</label>
+                    <label class="mb-2.5 block text-slate-900 dark:text-white font-medium">Nama Task</label>
                     <input
                         name="nama_task"
                         type="text"
                         required
-                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                        class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-3 px-5 text-slate-900 dark:text-white outline-none transition focus:border-primary active:border-primary"
                         value="{{ old('nama_task') }}"
                     />
-                    @error('nama_task')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="mb-4.5">
-                    <label class="mb-2.5 block text-black dark:text-white font-medium">Status</label>
+                    <label class="mb-2.5 block text-slate-900 dark:text-white font-medium">Status</label>
                     <select
                         name="status"
                         required
-                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                        class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-3 px-5 text-slate-900 dark:text-white outline-none transition focus:border-primary active:border-primary"
                     >
                         <option value="pending" @selected(old('status')==='pending')>pending</option>
                         <option value="on_progress" @selected(old('status')==='on_progress')>on_progress</option>
                         <option value="completed" @selected(old('status')==='completed')>completed</option>
                     </select>
-                    @error('status')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="mb-4.5">
-                    <label class="mb-2.5 block text-black dark:text-white font-medium">Due Date</label>
+                    <label class="mb-2.5 block text-slate-900 dark:text-white font-medium">Due Date</label>
                     <x-form.date-picker
                         name="due_date"
                         :default-date="old('due_date')"
                         placeholder="Pilih tanggal"
                     />
-                    @error('due_date')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="mb-4.5">
-                    <label class="mb-2.5 block text-black dark:text-white font-medium">Anggaran</label>
+                    <label class="mb-2.5 block text-slate-900 dark:text-white font-medium">Anggaran</label>
                     <input
                         name="anggaran_digunakan"
                         type="number"
                         step="0.01"
                         min="0"
-                        max="999999999999.99"
                         required
-                        class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-3 px-5 text-black dark:text-white outline-none transition focus:border-primary active:border-primary dark:bg-form-input"
+                        class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-3 px-5 text-slate-900 dark:text-white outline-none transition focus:border-primary active:border-primary"
                         value="{{ old('anggaran_digunakan') }}"
                     />
-                    @error('anggaran_digunakan')<p class="text-sm text-red-600 mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                <div class="flex justify-end gap-4.5 border-t border-stroke dark:border-strokedark pt-4.5">
+                <div class="flex justify-end gap-4.5 border-t border-stroke dark:border-slate-800 pt-4.5">
                     <button
                         type="button"
-                        class="flex justify-center rounded border border-stroke dark:border-strokedark py-2 px-6 font-medium text-black dark:text-white hover:shadow-1"
+                        class="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-slate-900 dark:text-white"
                         onclick="document.getElementById('addTaskModal').classList.add('hidden')"
                     >
                         Batal
                     </button>
                     <button
                         type="submit"
-                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-black hover:bg-opacity-90 shadow-md"
+                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90 shadow-md"
                     >
                         Simpan
                     </button>
@@ -265,9 +253,9 @@
 {{-- Modal Edit Task --}}
 <div id="editTaskModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%)] max-h-full">
     <div class="relative p-4 w-full max-w-lg max-h-full mx-auto">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 border border-stroke dark:border-strokedark">
-            <div class="p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-black dark:text-white">Edit Task</h3>
+        <div class="relative bg-white rounded-lg shadow dark:bg-slate-900 border border-stroke dark:border-slate-800">
+            <div class="p-4 md:p-5 border-b rounded-t border-slate-200 dark:border-slate-800">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Edit Task</h3>
             </div>
 
             <form id="editTaskForm" method="POST" class="p-4 md:p-5">
@@ -277,13 +265,13 @@
                     <input type="hidden" id="edit_task_id" />
 
                     <div>
-                        <label class="block text-sm font-medium text-black dark:text-white">Nama Task</label>
-                        <input id="edit_nama_task" name="nama_task" type="text" required class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" />
+                        <label class="block text-sm font-medium text-slate-900 dark:text-white">Nama Task</label>
+                        <input id="edit_nama_task" name="nama_task" type="text" required class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-2 px-4 outline-none text-slate-900 dark:text-white" />
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-black dark:text-white">Status</label>
-                        <select id="edit_status" name="status" class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" required>
+                        <label class="block text-sm font-medium text-slate-900 dark:text-white">Status</label>
+                        <select id="edit_status" name="status" class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-2 px-4 outline-none text-slate-900 dark:text-white" required>
                             <option value="pending">pending</option>
                             <option value="on_progress">on_progress</option>
                             <option value="completed">completed</option>
@@ -291,7 +279,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-black dark:text-white">Due Date</label>
+                        <label class="block text-sm font-medium text-slate-900 dark:text-white">Due Date</label>
                         <x-form.date-picker
                             name="due_date"
                             :default-date="''"
@@ -300,13 +288,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-black dark:text-white">Anggaran Digunakan</label>
-                        <input id="edit_anggaran" name="anggaran_digunakan" type="number" step="0.01" min="0" required class="w-full rounded border border-stroke dark:border-strokedark bg-transparent py-2 px-4 outline-none text-black dark:text-white" />
+                        <label class="block text-sm font-medium text-slate-900 dark:text-white">Anggaran Digunakan</label>
+                        <input id="edit_anggaran" name="anggaran_digunakan" type="number" step="0.01" min="0" required class="w-full rounded border border-stroke dark:border-slate-700 bg-transparent py-2 px-4 outline-none text-slate-900 dark:text-white" />
                     </div>
                 </div>
 
-                <div class="mt-6 flex justify-end gap-2 border-t border-stroke dark:border-strokedark pt-4">
-                    <button type="button" class="flex justify-center rounded border border-stroke py-2 px-4 font-medium text-black dark:text-white" onclick="document.getElementById('editTaskModal').classList.add('hidden');">Batal</button>
+                <div class="mt-6 flex justify-end gap-2 border-t border-stroke dark:border-slate-800 pt-4">
+                    <button type="button" class="flex justify-center rounded border border-stroke py-2 px-4 font-medium text-slate-900 dark:text-white" onclick="document.getElementById('editTaskModal').classList.add('hidden');">Batal</button>
                     <button type="submit" class="flex justify-center rounded bg-primary py-2 px-4 font-medium text-white hover:bg-opacity-90">Update</button>
                 </div>
             </form>
@@ -338,11 +326,9 @@
             status.value = statusVal;
             anggaran.value = anggaranVal;
 
-            // FIX UTAMA: Tangkap input flatpickr/date-picker di dalam container modal edit secara presisi
             const dueDateInput = modal.querySelector('input[name="due_date"]');
             if(dueDateInput) {
                 dueDateInput.value = dueDateVal || '';
-                // Jika komponen menggunakan Flatpickr, paksa instance-nya untuk mendeteksi tanggal barunya
                 if(dueDateInput._flatpickr) {
                     dueDateInput._flatpickr.setDate(dueDateVal || '');
                 }
