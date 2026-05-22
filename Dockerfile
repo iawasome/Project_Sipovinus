@@ -83,5 +83,5 @@ RUN printf '{\n\tadmin off\n}\n\n:80 {\n\troot * /var/www/html/public\n\tfile_se
 # Buka port 80 untuk Railway
 EXPOSE 80
 
-# Jalankan PHP-FPM dan Caddy Server secara bersamaan
-CMD ["sh", "-c", "php-fpm -D && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
+# GANTI BARIS CMD PALING BAWAH DI DOCKERFILE JADI INI:
+CMD ["sh", "-c", "php-fpm -D && php artisan db:seed --force && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
