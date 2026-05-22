@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Dashboard' }} | TailAdmin - Laravel Tailwind CSS Admin Dashboard Template</title>
+    <title>{{ $title ?? 'Dashboard' }} | Sipovinus</title>
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Alpine.js -->
     {{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
-    <!-- Theme Store -->
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('theme', {
@@ -75,7 +72,6 @@
         });
     </script>
 
-    <!-- Apply dark mode immediately to prevent flash -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
