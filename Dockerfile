@@ -83,5 +83,5 @@ RUN printf '{\n\tadmin off\n}\n\n:80 {\n\troot * /var/www/html/public\n\tfile_se
 # Buka port 80 untuk Railway
 EXPOSE 80
 
-# KOREKSI FIX: Paksa pembersihan total database (migrate:fresh) dan jalankan seeder baru saat container naik
-CMD ["sh", "-c", "php-fpm -D && php artisan migrate:fresh --seed --force && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
+# KEMBALIKAN BARIS CMD PALING BAWAH JADI SEPERTI INI (Hapus perintah migrate:fresh):
+CMD ["sh", "-c", "php-fpm -D && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
