@@ -44,7 +44,7 @@
             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
           >
             <option value="" disabled {{ old('status') ? '' : 'selected' }}>Pilih Status</option>
-            <option value="planning" {{ old('status') === 'planning' ? 'selected' : '' }}>Planning</option>
+            <option value="pending" {{ old('status') === 'pending' ? 'selected' : '' }}>Pending</option>
             <option value="on_progress" {{ old('status') === 'on_progress' ? 'selected' : '' }}>On Progress</option>
             <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>Completed</option>
           </select>
