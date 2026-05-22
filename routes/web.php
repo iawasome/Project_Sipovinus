@@ -16,8 +16,9 @@ Route::get('/', function () {
 
 // 2. Gerbang Khusus Tamu (Belum Login) - Diproteksi agar tidak bisa diakses jika sudah login
 Route::middleware('guest')->group(function () {
-    Route::get('/signin', [AuthController::class, 'showLogin'])->name('signin');
+    Route::get('/signin', [AuthController::class, 'showLogin'])->name('signin')->name('login');
     Route::get('/signup', [AuthController::class, 'showRegister'])->name('signup');
+
     Route::post('/signup', [AuthController::class, 'register'])->name('signup.post');
     Route::post('/signin', [AuthController::class, 'login'])->name('signin.post');
 });
