@@ -18,7 +18,7 @@ return new class extends Migration
         $table->text('description')->nullable();
         $table->date('start_date');
         $table->date('end_date');
-        $table->enum('status', ['planning', 'on_progress', 'completed'])->default('pending');
+        $table->enum('status', ['pending', 'on_progress', 'completed'])->default('pending');
         $table->decimal('budget_estimate', 15, 2);
         $table->timestamps();
     });
