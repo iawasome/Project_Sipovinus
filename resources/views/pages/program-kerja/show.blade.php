@@ -238,10 +238,7 @@
                     >
                         Batal
                     </button>
-                    <button
-                        type="submit"
-                        class="flex justify-center rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90 shadow-md"
-                    >
+                    <button type="submit" class="flex justify-center rounded bg-blue-600 hover:bg-blue-700 py-2 px-6 font-medium text-white transition shadow-md">
                         Simpan
                     </button>
                 </div>
@@ -295,7 +292,7 @@
 
                 <div class="mt-6 flex justify-end gap-2 border-t border-stroke dark:border-slate-800 pt-4">
                     <button type="button" class="flex justify-center rounded border border-stroke py-2 px-4 font-medium text-slate-900 dark:text-white" onclick="document.getElementById('editTaskModal').classList.add('hidden');">Batal</button>
-                    <button type="submit" class="flex justify-center rounded bg-primary py-2 px-4 font-medium text-white hover:bg-opacity-90">Update</button>
+                    <button type="submit" class="flex justify-center rounded bg-blue-600 hover:bg-blue-700 py-2 px-4 font-medium text-white transition shadow-md">Update</button>
                 </div>
             </form>
         </div>
