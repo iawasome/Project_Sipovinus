@@ -84,4 +84,4 @@ RUN printf '{\n\tadmin off\n}\n\n:80 {\n\troot * /var/www/html/public\n\tfile_se
 EXPOSE 80
 
 # KEMBALIKAN BARIS CMD PALING BAWAH JADI SEPERTI INI (Hapus perintah migrate:fresh):
-CMD ["sh", "-c", "php-fpm -D && php artisan migrate:fresh --seed --force && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
+CMD ["sh", "-c", "php-fpm -D && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
