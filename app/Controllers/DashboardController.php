@@ -11,14 +11,25 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+public function index()
 {
-    $data = [
-        'total_proker' => ProgramKerja::count(),
-        'proker_selesai' => ProgramKerja::where('status', 'completed')->count(),
-        'proker_berjalan' => ProgramKerja::where('status', 'on_progress')->count(),
-        'total_anggaran_keluar' => \App\Models\Anggaran::where('type', 'expense')->sum('amount'),
-    ];
+    // Kita bungkus pakai try-catch agar jika database kosong/error, aplikasi tidak crash dan tidak menendang user keluar!
+    try {
+        $data = [
+            'total_proker' => class_exists(\App\Models\ProgramKerja::class) ? ProgramKerja::count() : 0,
+            'proker_selesai' => class_exists(\App\Models\ProgramKerja::class) ? ProgramKerja::where('status', 'completed')->count() : 0,
+            'proker_berjalan' => class_exists(\App\Models\ProgramKerja::class) ? ProgramKerja::where('status', 'on_progress')->count() : 0,
+            'total_anggaran_keluar' => class_exists(\App\Models\Anggaran::class) ? \App\Models\Anggaran::where('type', 'expense')->sum('amount') : 0,
+        ];
+    } catch (\Exception $e) {
+        // Jika tabel belum di-migrate/kosong, paksa isi angka 0 agar halaman tetap terbuka
+        $data = [
+            'total_proker' => 0,
+            'proker_selesai' => 0,
+            'proker_berjalan' => 0,
+            'total_anggaran_keluar' => 0,
+        ];
+    }
 
     return view('pages.dashboard.ecommerce', ['title' => 'Dashboard', 'data' => $data]);
 }
