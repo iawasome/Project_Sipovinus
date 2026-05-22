@@ -25,13 +25,24 @@
                         <form method="POST" action="/signup">
                             @csrf
 
+                            @if ($errors->any())
+                                <div style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; border: 1px solid #fca5a5;">
+                                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Gagal mendaftar. Silakan periksa kembali:</p>
+                                    <ul style="list-style-type: disc; list-style-position: inside; font-size: 0.875rem; line-height: 1.25rem;">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div class="space-y-5">
                                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                     <div class="sm:col-span-1">
                                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                             Name<span class="text-error-500">*</span>
                                         </label>
-                                        <input type="text" id="name" name="name" placeholder="Enter your name" required
+                                        <input type="text" id="name" name="name" placeholder="Enter your name" value="{{ old('name') }}" required
                                             class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                     </div>
 
@@ -42,12 +53,12 @@
                                         <select name="role_id" required
                                             class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                             <option value="">Select role</option>
-                                            <option value="1">Admin</option>
-                                            <option value="2">Ketua Umum</option>
-                                            <option value="3">Sekretaris</option>
-                                            <option value="4">Bendahara</option>
-                                            <option value="5">Kepala Bidang</option>
-                                            <option value="6">Anggota</option>
+                                            <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Admin</option>
+                                            <option value="2" {{ old('role_id') == 2 ? 'selected' : '' }}>Ketua Umum</option>
+                                            <option value="3" {{ old('role_id') == 3 ? 'selected' : '' }}>Sekretaris</option>
+                                            <option value="4" {{ old('role_id') == 4 ? 'selected' : '' }}>Bendahara</option>
+                                            <option value="5" {{ old('role_id') == 5 ? 'selected' : '' }}>Kepala Bidang</option>
+                                            <option value="6" {{ old('role_id') == 6 ? 'selected' : '' }}>Anggota</option>
                                         </select>
                                     </div>
                                 </div>
@@ -60,12 +71,12 @@
                                         <select name="division_id" required
                                             class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                                             <option value="">Select division</option>
-                                            <option value="1">Pengurus Inti</option>
-                                            <option value="2">PSDM (Pengembangan Sumber Daya Mahasiswa)</option>
-                                            <option value="3">Humas (Hubungan Masyarakat)</option>
-                                            <option value="4">Kominfo (Komunikasi dan Informasi)</option>
-                                            <option value="5">Minat dan Bakat</option>
-                                            <option value="6">Kewirausahaan</option>
+                                            <option value="1" {{ old('division_id') == 1 ? 'selected' : '' }}>Pengurus Inti</option>
+                                            <option value="2" {{ old('division_id') == 2 ? 'selected' : '' }}>PSDM (Pengembangan Sumber Daya Mahasiswa)</option>
+                                            <option value="3" {{ old('division_id') == 3 ? 'selected' : '' }}>Humas (Hubungan Masyarakat)</option>
+                                            <option value="4" {{ old('division_id') == 4 ? 'selected' : '' }}>Kominfo (Komunikasi dan Informasi)</option>
+                                            <option value="5" {{ old('division_id') == 5 ? 'selected' : '' }}>Minat dan Bakat</option>
+                                            <option value="6" {{ old('division_id') == 6 ? 'selected' : '' }}>Kewirausahaan</option>
                                         </select>
                                     </div>
                                 </div>
@@ -74,7 +85,7 @@
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Email<span class="text-error-500">*</span>
                                     </label>
-                                    <input type="email" id="email" name="email" placeholder="Enter your email" required
+                                    <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 </div>
 
