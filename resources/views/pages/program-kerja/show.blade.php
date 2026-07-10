@@ -27,6 +27,8 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Nama</p>
                 <p class="mt-1 text-lg font-bold text-slate-900 dark:text-white">{{ $proker->name }}</p>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 font-medium">Divisi: {{ $proker->division?->name }}</p>
+                <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Sasaran/Target Program Kerja</p>
+                <p class="mt-1 text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{{ $proker->target_program_kerja }}</p>
             </div>
 
             {{-- Card 2: Dana Awal --}}

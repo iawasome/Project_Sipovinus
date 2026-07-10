@@ -17,8 +17,18 @@
         </div>
 
         <div class="mb-4">
+          <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Sasaran/Target Program Kerja</label>
+          <textarea
+            name="target_program_kerja"
+            required
+            rows="4"
+            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          >{{ old('target_program_kerja', $proker->target_program_kerja) }}</textarea>
+        </div>
+
+        <div class="mb-4">
           <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Status Program Kerja</label>
-          <select name="status" required
+          <select
                   class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white">
             <option value="pending" @selected($proker->status === 'pending')>pending</option>
             <option value="on_progress" @selected($proker->status === 'on_progress')>on_progress</option>

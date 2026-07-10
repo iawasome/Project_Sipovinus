@@ -14,6 +14,7 @@ class ProgramKerja extends Model
         'end_date',
         'status',
         'budget_estimate',
+        'target_program_kerja',
     ];
 
     // Catatan: kolom progress belum ada di tabel `program_kerjas` (sesuai migration).

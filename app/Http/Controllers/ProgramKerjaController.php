@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Anggaran;
 use App\Models\ProgramKerja;
 use App\Models\Task;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,6 +44,7 @@ class ProgramKerjaController extends Controller
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'budget_estimate' => ['required', 'numeric', 'min:0'],
+            'target_program_kerja' => ['required', 'string'],
         ]);
 
         ProgramKerja::create([
@@ -54,6 +54,7 @@ class ProgramKerjaController extends Controller
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'budget_estimate' => $validated['budget_estimate'],
+            'target_program_kerja' => $validated['target_program_kerja'],
         ]);
 
         return redirect()->route('program-kerja.index')->with('success', 'Program Kerja berhasil ditambahkan');
@@ -95,7 +96,6 @@ class ProgramKerjaController extends Controller
             'anggaran_digunakan' => ['required', 'numeric', 'min:0'],
         ]);
 
-
         $proker = ProgramKerja::findOrFail($prokerId);
 
         return DB::transaction(function () use ($validated, $proker, $request) {
@@ -114,10 +114,6 @@ class ProgramKerjaController extends Controller
                 'is_completed' => $validated['status'] === 'completed',
             ]);
 
-
-
-
-            // expense untuk task
             Anggaran::create([
                 'program_id' => $proker->id,
                 'task_id' => $task->id,
@@ -141,7 +137,6 @@ class ProgramKerjaController extends Controller
             'anggaran_digunakan' => ['required', 'numeric', 'min:0'],
         ]);
 
-
         $task = Task::with('program')->findOrFail($id);
         $prokerId = $task->program_id;
 
@@ -154,13 +149,11 @@ class ProgramKerjaController extends Controller
                 'is_completed' => $validated['status'] === 'completed',
             ]);
 
-
             $anggaran = Anggaran::where('task_id', $task->id)
                 ->where('type', 'expense')
                 ->first();
 
             if (!$anggaran) {
-                // Defensive: jika baris anggaran tidak ada, buat ulang
                 Anggaran::create([
                     'program_id' => $prokerId,
                     'task_id' => $task->id,
@@ -211,6 +204,7 @@ class ProgramKerjaController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'division_id' => ['sometimes', 'nullable', 'integer'],
             'status' => ['required', 'in:pending,on_progress,completed'],
+            'target_program_kerja' => ['required', 'string'],
             'start_date' => ['sometimes', 'nullable', 'date'],
             'end_date' => ['sometimes', 'nullable', 'date', 'after_or_equal:start_date'],
             'budget_estimate' => ['sometimes', 'nullable', 'numeric', 'min:0'],
@@ -218,10 +212,10 @@ class ProgramKerjaController extends Controller
 
         $proker = ProgramKerja::findOrFail($id);
 
-        // Update hanya field yang tersedia dari input form.
         $updateData = [
             'name' => $validated['name'],
             'status' => $validated['status'],
+            'target_program_kerja' => $validated['target_program_kerja'],
         ];
 
         foreach (['division_id', 'start_date', 'end_date', 'budget_estimate'] as $field) {
@@ -232,13 +226,10 @@ class ProgramKerjaController extends Controller
 
         $proker->update($updateData);
 
-
         return redirect()
             ->route('program-kerja.show', $proker->id)
             ->with('success', 'Program Kerja berhasil diupdate');
-
     }
-
 
     /**
      * Remove the specified resource from storage.

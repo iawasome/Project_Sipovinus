@@ -10,49 +10,138 @@ class KeuanganController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Pemasukan Utama otomatis dihitung dari Total Estimasi Anggaran (budget_estimate) semua Proker
+        /*
+        |--------------------------------------------------------------------------
+        | Ringkasan Keuangan Organisasi
+        |--------------------------------------------------------------------------
+        */
+
+        // Dana dialokasikan berasal dari total budget seluruh program kerja
         $total_pemasukan = ProgramKerja::sum('budget_estimate');
 
-        // 2. Pengeluaran riil tetap dihitung dari akumulasi transaksi 'expense' di tabel anggaran
+        // Pengeluaran riil dari seluruh transaksi expense
         $total_pengeluaran = Anggaran::where('type', 'expense')->sum('amount');
 
-        // 3. Sisa Saldo Kas Utama Organisasi
+        // Saldo organisasi
         $sisa_saldo = $total_pemasukan - $total_pengeluaran;
 
-        // Ringkasan pengeluaran per proker dari tabel anggaran
-        $anggaranAgg = Anggaran::select('program_id')
-            ->selectRaw("SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense")
-            ->groupBy('program_id')
-            ->get()
-            ->keyBy('program_id');
+        /*
+        |--------------------------------------------------------------------------
+        | Data Per Program Kerja
+        |--------------------------------------------------------------------------
+        */
 
-        // 4. Bangun laporan gabungan dengan menyuntikkan data budget_estimate asli proker
-        $laporan_per_proker = ProgramKerja::with('division')
-            ->get()
-            ->map(function (ProgramKerja $program) use ($anggaranAgg) {
-                $agg = $anggaranAgg->get($program->id);
+        $laporan_per_proker = ProgramKerja::with([
+            'division',
+            'anggarans'
+        ])
+        ->get()
+        ->map(function (ProgramKerja $program) {
 
-                // Dana dialokasikan langsung mengambil data rancangan 'budget_estimate' dari proker terkait
-                $dana_dialokasikan = (float) ($program->budget_estimate ?? 0);
-                $total_expense = (float) ($agg->total_expense ?? 0);
+            $totalIncome = $program->anggarans
+                ->where('type', 'income')
+                ->sum('amount');
 
-                return [
-                    'program_id' => $program->id,
-                    'nama_proker' => $program->name,
-                    'divisi' => $program->division?->name,
-                    'dana_dialokasikan' => $dana_dialokasikan, // Ambil dari budget_estimate proker
-                    'dana_terpakai' => $total_expense,         // Ambil dari pengeluaran riil anggaran
-                    'sisa_dana_proker' => $dana_dialokasikan - $total_expense, // Hasil pasti bersih/positif di awal
-                ];
-            })
-            ->values();
+            $totalExpense = $program->anggarans
+                ->where('type', 'expense')
+                ->sum('amount');
+
+            return [
+
+                'program_id' => $program->id,
+
+                'nama_proker' => $program->name,
+
+                'divisi' => $program->division?->name,
+
+                'dana_dialokasikan' => (float) $program->budget_estimate,
+
+                'dana_terpakai' => $totalExpense,
+
+                'sisa_dana_proker' => (float) $program->budget_estimate - $totalExpense,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Ringkasan Detail
+                |--------------------------------------------------------------------------
+                */
+
+                'total_income' => $totalIncome,
+
+                'total_expense' => $totalExpense,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Transaksi Dipisahkan
+                |--------------------------------------------------------------------------
+                */
+
+                'transaksi' => [
+
+                    'income' => $program->anggarans
+                        ->where('type', 'income')
+                        ->sortByDesc('created_at')
+                        ->values()
+                        ->map(function ($item) {
+
+                            return [
+
+                                'id' => $item->id,
+
+                                'tanggal' => optional($item->created_at)
+                                    ->format('d M Y'),
+
+                                'description' => $item->description,
+
+                                'amount' => $item->amount,
+
+                                'receipt_path' => $item->receipt_path,
+
+                            ];
+
+                        }),
+
+                    'expense' => $program->anggarans
+                        ->where('type', 'expense')
+                        ->sortByDesc('created_at')
+                        ->values()
+                        ->map(function ($item) {
+
+                            return [
+
+                                'id' => $item->id,
+
+                                'tanggal' => optional($item->created_at)
+                                    ->format('d M Y'),
+
+                                'description' => $item->description,
+
+                                'amount' => $item->amount,
+
+                                'receipt_path' => $item->receipt_path,
+
+                            ];
+
+                        }),
+
+                ],
+
+            ];
+        })
+        ->values();
 
         return view('pages.laporan-keuangan', [
+
             'title' => 'Laporan Keuangan',
+
             'total_pemasukan' => $total_pemasukan,
+
             'total_pengeluaran' => $total_pengeluaran,
+
             'sisa_saldo' => $sisa_saldo,
+
             'laporan_per_proker' => $laporan_per_proker,
+
         ]);
     }
 }

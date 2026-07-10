@@ -29,6 +29,7 @@
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Divisi</th>
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Progres</th>
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Sasaran/Target</th>
               <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900 dark:text-white">Aksi</th>
             </tr>
           </thead>
@@ -53,7 +54,13 @@
               <td class="px-6 py-4 text-sm">
                 <x-status-badge :status="$proker->status" />
               </td>
+              <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 max-w-[260px]">
+                <span class="block overflow-hidden text-ellipsis whitespace-nowrap" title="{{ $proker->target_program_kerja }}">
+                  {{ \Illuminate\Support\Str::limit($proker->target_program_kerja, 60) }}
+                </span>
+              </td>
               <td class="px-6 py-4">
+
                 <div class="flex items-center justify-center gap-2">
                   <!-- Edit Button -->
                   <a href="{{ route('program-kerja.edit', $proker->id) }}"
@@ -92,7 +99,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+              <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                 Tidak ada data Program Kerja
               </td>
             </tr>

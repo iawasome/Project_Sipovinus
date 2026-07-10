@@ -1,15 +1,9 @@
-# TODO - Manajemen Divisi Active CRUD
-
-- [x] (Step 1) Buat controller: `app/Http/Controllers/DivisionController.php` dengan CRUD divisi.
-
-- [x] (Step 2) Tambah/ubah route di `routes/web.php` agar `/manajemen-divisi` menampilkan index CRUD.
-
-- [x] (Step 3) Buat views CRUD: `resources/views/pages/divisi/index.blade.php`, `create.blade.php`, `edit.blade.php`.
-
-- [x] (Step 4) Update `resources/views/pages/manajemen-divisi.blade.php` supaya menampilkan halaman index CRUD.
-
-- [x] (Step 5) Pastikan tombol tambah/edit/hapus hanya tampil untuk admin (role_id == 1) dan route CRUD diproteksi.
-
-- [x] (Step 6) Validasi manual: buka `/manajemen-divisi`, cek daftar, cek akses admin vs non-admin.
-
+- [ ] Modify KeuanganController to group transaksi into transaksi['income'] and transaksi['expense'] (and ensure total_income/total_expense stay consistent)
+- [ ] Update laporan-keuangan.blade.php:
+  - [ ] Add AKSI column + Detail button
+  - [ ] Implement expandable row accordion (pure JS, no Alpine/Vue/React), only one open at a time
+  - [ ] Add expanded TailAdmin-style card with program info + two sections (UANG MASUK/UANG KELUAR) and transaction tables
+  - [ ] Add bottom totals inside expanded card
+  - [ ] Keep existing summary cards and all TailAdmin styling/dark mode
+- [ ] Quick manual test by opening the Laporan Keuangan page and clicking Detail rows
 

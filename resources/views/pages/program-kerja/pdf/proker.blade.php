@@ -49,8 +49,13 @@
             </td>
         </tr>
         <tr>
+            <th>Sasaran/Target</th>
+            <td colspan="3" style="white-space:pre-wrap;">{{ $proker->target_program_kerja }}</td>
+        </tr>
+        <tr>
             <th>Estimasi Anggaran</th>
             <td colspan="3">
+
                 @php
                     $budget = $proker->budget_estimate;
                 @endphp
